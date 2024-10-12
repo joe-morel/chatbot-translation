@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { useEffect, useRef } from "react";
 import { Check, Plus, Send, Loader2 } from "lucide-react"; // Asegúrate de importar Loader2
-
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Button } from "../components/ui/button";
@@ -80,12 +80,20 @@ export default function CardsChat() {
   const [input, setInput] = React.useState("");
   const [loading, setLoading] = React.useState(false); // Estado de loading
   const inputLength = input.trim().length;
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      // Ajustar el scroll al final
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const translateMessage = async (message: string) => {
     setLoading(true); // Iniciar loading
     try {
-           // Simular un tiempo de espera mínimo (por ejemplo, 500 ms)
-           await new Promise(resolve => setTimeout(resolve, 200));
+      // Simular un tiempo de espera mínimo (por ejemplo, 500 ms)
+      await new Promise((resolve) => setTimeout(resolve, 200));
       const response = await fetch(
         `https://translation.googleapis.com/language/translate/v2?key=AIzaSyBTGnW1qen-dW1x8q332rrLjKeF5nB57Js`,
         {
@@ -173,27 +181,33 @@ export default function CardsChat() {
             </Tooltip>
           </TooltipProvider>
         </CardHeader>
+
         <CardContent>
-          <div className="space-y-4">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
-                  message.role === "user"
-                    ? "ml-auto bg-primary text-primary-foreground"
-                    : "bg-muted"
-                )}
-              >
-                {message.content}
-              </div>
-            ))}
-            {loading && ( // Mostrar el spinner si loading es true
-              <div className="flex items-center">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Translating...</span>
-              </div>
-            )}
+          <div
+            className="flex flex-col h-80 overflow-y-auto p-4"
+            ref={scrollRef}
+          >
+            <div className="flex-1 flex flex-col space-y-4 ">
+              {messages.map((message, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                    message.role === "user"
+                      ? "ml-auto bg-primary text-primary-foreground"
+                      : "bg-muted"
+                  )}
+                >
+                  {message.content}
+                </div>
+              ))}
+              {loading && ( // Mostrar el spinner si loading es true
+                <div className="flex items-center">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <span>Translating...</span>
+                </div>
+              )}
+            </div>
           </div>
         </CardContent>
 

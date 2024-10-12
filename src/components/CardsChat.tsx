@@ -152,7 +152,7 @@ export default function CardsChat() {
 
   return (
     <>
-      <Card>
+      <Card className="w-full max-w-sm mx-auto">
         <CardHeader className="flex flex-row items-center">
           <div className="flex items-center space-x-4">
             <Avatar>

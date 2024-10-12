@@ -85,7 +85,7 @@ export default function CardsChat() {
     setLoading(true); // Iniciar loading
     try {
            // Simular un tiempo de espera mínimo (por ejemplo, 500 ms)
-           await new Promise(resolve => setTimeout(resolve, 500));
+           await new Promise(resolve => setTimeout(resolve, 200));
       const response = await fetch(
         `https://translation.googleapis.com/language/translate/v2?key=AIzaSyBTGnW1qen-dW1x8q332rrLjKeF5nB57Js`,
         {

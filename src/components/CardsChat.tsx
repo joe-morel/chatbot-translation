@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Check, Plus, Send } from "lucide-react"
 
+
 import { cn } from "@/lib/utils"
 import {
   Avatar,
@@ -40,6 +41,8 @@ import {
   TooltipTrigger,
 } from "../components/ui//tooltip"
 
+const TARGET_LANGUAGE = "en"; 
+
 
 const users = [
   {
@@ -75,27 +78,95 @@ type User = (typeof users)[number]
 export default function CardsChat() {
     const [open, setOpen] = React.useState(false)
     const [selectedUsers, setSelectedUsers] = React.useState<User[]>([])
+
+
+    
   
     const [messages, setMessages] = React.useState([
       {
         role: "agent",
-        content: "Hi, how can I help you today?",
+        content: "Hello, write me something and I will help you to translate it.",
       },
-      {
-        role: "user",
-        content: "Hey, I'm having trouble with my account.",
-      },
-      {
-        role: "agent",
-        content: "What seems to be the problem?",
-      },
-      {
-        role: "user",
-        content: "I can't log in.",
-      },
+      // {
+      //   role: "user",
+      //   content: "Hey, I'm having trouble with my account.",
+      // },
+      // {
+      //   role: "agent",
+      //   content: "What seems to be the problem?",
+      // },
+      // {
+      //   role: "user",
+      //   content: "I can't log in.",
+      // },
     ])
     const [input, setInput] = React.useState("")
     const inputLength = input.trim().length
+
+    const translateMessage = async (message: string) => {
+      try {
+        const response = await fetch(
+          `https://translation.googleapis.com/language/translate/v2?key=AIzaSyBTGnW1qen-dW1x8q332rrLjKeF5nB57Js`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              q: message,
+              target: TARGET_LANGUAGE,
+            }),
+          }
+        );
+    
+        if (!response.ok) {
+          throw new Error("Error en la traducción");
+        }
+    
+        const data = await response.json();
+        return data.data.translations[0].translatedText;
+      } catch (error) {
+        console.error("Error traduciendo el mensaje:", error);
+        return message; // Si hay un error, devuelve el mensaje original
+      }
+    };
+    
+
+    const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (inputLength === 0) return;
+
+      // Agregar el mensaje original del usuario al estado de mensajes
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        role: "user",
+        content: input,
+      },
+    ]);
+
+      // const translatedMessage = await translateMessage(input); // Traduce el mensaje
+      // setMessages([
+      //   ...messages,
+      //   {
+      //     role: "user",
+      //     content: translatedMessage,
+      //   },
+      // ]);
+      // Traducir el mensaje
+    const translatedMessage = await translateMessage(input);
+     
+     // Agregar la traducción como un nuevo mensaje del agente
+     setMessages((prevMessages) => [
+       ...prevMessages,
+       {
+         role: "agent",
+         content: translatedMessage,
+       },
+     ]);
+
+      setInput("");
+    };
   
     return (
       <>
@@ -145,7 +216,7 @@ export default function CardsChat() {
               ))}
             </div>
           </CardContent>
-          <CardFooter>
+          {/* <CardFooter>
             <form
               onSubmit={(event) => {
                 event.preventDefault()
@@ -174,7 +245,25 @@ export default function CardsChat() {
                 <span className="sr-only">Send</span>
               </Button>
             </form>
-          </CardFooter>
+          </CardFooter> */}
+
+
+<CardFooter>
+          <form onSubmit={handleSendMessage} className="flex w-full items-center space-x-2">
+            <Input
+              id="message"
+              placeholder="Type your message..."
+              className="flex-1"
+              autoComplete="off"
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+            />
+            <Button type="submit" size="icon" disabled={inputLength === 0}>
+              <Send className="h-4 w-4" />
+              <span className="sr-only">Send</span>
+            </Button>
+          </form>
+        </CardFooter>
         </Card>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="gap-0 p-0 outline-none">

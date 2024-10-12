@@ -5,11 +5,11 @@ import CardsChat from "../components/CardsChat";
 export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-center lg:text-5xl">
+      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-center mt-10 lg:text-5xl">
         Chatbot Translation App
       </h1>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-center">
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <span className="text-sm text-muted-foreground">Develop with</span>
           <Image
             className="dark:invert ml-2" // Añadir un margen a la izquierda
@@ -19,7 +19,7 @@ export default function Home() {
             height={28.5}
             priority
           />
-        </div>
+        </div> */}
 
         {/* <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2">

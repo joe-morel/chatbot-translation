@@ -1,3 +1,9 @@
+Chatbot Translation Web App
+
+A chatbot that can translate text between multiple languages in real-time within a chat
+interface. Users can send messages in one language and receive translations in
+another, facilitating seamless multilingual communication.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

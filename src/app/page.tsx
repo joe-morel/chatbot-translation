@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import CardsChat from "../components/CardsChat";
 
 export default function Home() {

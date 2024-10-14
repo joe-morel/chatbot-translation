@@ -45,6 +45,9 @@ import {
   TooltipTrigger,
 } from "../components/ui/tooltip";
 
+import { useToast } from "@/hooks/use-toast"; // <--- useToast
+import { ToastAction } from "../components/ui/toast";  // <---  ToastAction
+
 // const TARGET_LANGUAGE = "en";
 
 const languages = [
@@ -115,6 +118,7 @@ export default function CardsChat() {
   //const [languages, setLanguages] = React.useState([]); //Para el fetch de listado de idiomas
   const inputLength = input.trim().length;
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();  // <--- Uso del hook toast
 
   //  para el fetch de litado de idiomas
   // useEffect(() => {
@@ -190,12 +194,22 @@ export default function CardsChat() {
 
       if (!response.ok) {
         throw new Error("Error en la traducción");
+        
       }
 
       const data = await response.json();
       return data.data.translations[0].translatedText;
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error traduciendo el mensaje:", error);
+
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request. Please check your connection.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+
       return message;
     } finally {
       setLoading(false);

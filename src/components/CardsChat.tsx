@@ -45,7 +45,7 @@ import {
   TooltipTrigger,
 } from "../components/ui/tooltip";
 
-const TARGET_LANGUAGE = "en";
+// const TARGET_LANGUAGE = "en";
 
 const languages = [
   { name: 'English', language: 'en' },

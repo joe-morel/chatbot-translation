@@ -45,8 +45,8 @@ import {
   TooltipTrigger,
 } from "../components/ui/tooltip";
 
-import { useToast } from "@/hooks/use-toast"; // <--- useToast
-import { ToastAction } from "../components/ui/toast";  // <---  ToastAction
+ import { useToast } from "@/hooks/use-toast"; // <--- useToast
+ import { ToastAction } from "../components/ui/toast";  // <---  ToastAction
 
 // const TARGET_LANGUAGE = "en";
 
@@ -118,7 +118,10 @@ export default function CardsChat() {
   //const [languages, setLanguages] = React.useState([]); //Para el fetch de listado de idiomas
   const inputLength = input.trim().length;
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();  // <--- Uso del hook toast
+   const { toast } = useToast();  // <--- Uso del hook toast
+  //    const [error, setError] = React.useState<string | null>(null); // Estado para manejar el error
+
+
 
   //  para el fetch de litado de idiomas
   // useEffect(() => {
@@ -175,7 +178,11 @@ export default function CardsChat() {
 
 //para traducir con selector
   const translateMessage = async (message: string) => {
+
+
     setLoading(true);
+    // setError(null); // Limpiamos el error antes de intentar la solicitud
+
     try {
       await new Promise((resolve) => setTimeout(resolve, 200));
       const response = await fetch(
@@ -203,6 +210,7 @@ export default function CardsChat() {
     catch (error) {
       console.error("Error traduciendo el mensaje:", error);
 
+      // setError("Conexión perdida. Por favor, verifica tu conexión a Internet e intenta nuevamente.");
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -268,7 +276,14 @@ export default function CardsChat() {
 
   return (
     <>
+    {/* {error && (
+      <div className="bg-red-500 text-white p-4 rounded-lg mt-4">
+        {error}
+      </div>
+    )} */}
       <div className="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-2s">
+
+      
 
       <div className="w-full max-w-xs mx-auto">
         <fieldset className="grid gap-6 rounded-lg border p-4">

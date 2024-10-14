@@ -298,11 +298,11 @@ export default function CardsChat() {
                 <AvatarFallback>OM</AvatarFallback>
               </Avatar>
               <div>
-                <p className="text-sm font-medium leading-none">Sofia Davis</p>
-                <p className="text-sm text-muted-foreground">m@example.com</p>
+                <p className="text-sm font-medium leading-none">Chatbot Agent</p>
+                <p className="text-sm text-muted-foreground">support@example.com</p>
               </div>
             </div>
-            <TooltipProvider delayDuration={0}>
+            {/* <TooltipProvider delayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -317,7 +317,7 @@ export default function CardsChat() {
                 </TooltipTrigger>
                 <TooltipContent sideOffset={10}>New message</TooltipContent>
               </Tooltip>
-            </TooltipProvider>
+            </TooltipProvider> */}
           </CardHeader>
 
           <CardContent>
@@ -373,7 +373,7 @@ export default function CardsChat() {
             </form>
           </CardFooter>
         </Card>
-        <Dialog open={open} onOpenChange={setOpen}>
+        {/* <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="gap-0 p-0 outline-none">
             <DialogHeader className="px-4 pb-4 pt-5">
               <DialogTitle>New message</DialogTitle>
@@ -453,7 +453,7 @@ export default function CardsChat() {
               </DialogFooter>
             </DialogFooter>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
     </>
   );

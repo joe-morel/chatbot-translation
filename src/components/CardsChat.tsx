@@ -45,7 +45,7 @@ import {
   TooltipTrigger,
 } from "../components/ui/tooltip";
 
- import { useToast } from "@/hooks/use-toast"; // <--- useToast
+ import { useToast } from "../hooks/use-toast"; // <--- useToast
  import { ToastAction } from "../components/ui/toast";  // <---  ToastAction
 
 // const TARGET_LANGUAGE = "en";

@@ -114,7 +114,7 @@ export default function CardsChat() {
   ]);
   const [input, setInput] = React.useState("");
   const [loading, setLoading] = React.useState(false); // Estado de loading
-  const [selectedLanguage, setSelectedLanguage] = React.useState("en"); // Estado para el idioma seleccionado
+  const [selectedLanguage, setSelectedLanguage] = React.useState(""); // Estado para el idioma seleccionado
   //const [languages, setLanguages] = React.useState([]); //Para el fetch de listado de idiomas
   const inputLength = input.trim().length;
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -186,7 +186,7 @@ export default function CardsChat() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 200));
       const response = await fetch(
-        `https://translation.googleapis.com/language/translate/v2?key=AIzaSyBTGnW1qen-dW1x8q332rrLjKeF5nB57Js`,
+        `https://translation.googleapis.com/language/translate/v2?key=${process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}`,
         {
           method: "POST",
           headers: {
@@ -245,12 +245,34 @@ export default function CardsChat() {
   //   }
   // };
   
+//viejo handle
+  // const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   if (inputLength === 0) return;
 
+  //   // Agregar el mensaje original del usuario al estado de mensajes
+  //   setMessages((prevMessages) => [
+  //     ...prevMessages,
+  //     {
+  //       role: "user",
+  //       content: input,
+  //     },
+  //   ]);
+
+  //nuevo
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!selectedLanguage) {
+      toast({
+        variant: "destructive",
+        title: "Language not selected",
+        description: "Please select a language before sending a message.",
+      });
+      return;
+    }
+
     if (inputLength === 0) return;
 
-    // Agregar el mensaje original del usuario al estado de mensajes
     setMessages((prevMessages) => [
       ...prevMessages,
       {

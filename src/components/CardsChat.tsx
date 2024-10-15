@@ -45,8 +45,8 @@ import {
   TooltipTrigger,
 } from "../components/ui/tooltip";
 
- import { useToast } from "../hooks/use-toast"; // <--- useToast
- import { ToastAction } from "../components/ui/toast";  // <---  ToastAction
+import { useToast } from "../hooks/use-toast"; // <--- useToast
+import { ToastAction } from "../components/ui/toast"; // <---  ToastAction
 
 // const TARGET_LANGUAGE = "en";
 
@@ -116,13 +116,13 @@ export default function CardsChat() {
   const [loading, setLoading] = React.useState(false); // Estado de loading
   const [selectedLanguage, setSelectedLanguage] = React.useState(""); // Estado para el idioma seleccionado
   //const [languages, setLanguages] = React.useState([]); //Para el fetch de listado de idiomas
-  const [languages, setLanguages] = React.useState<{ name: string; language: string }[]>([]);
+  const [languages, setLanguages] = React.useState<
+    { name: string; language: string }[]
+  >([]);
   const inputLength = input.trim().length;
   const scrollRef = useRef<HTMLDivElement>(null);
-   const { toast } = useToast();  // <--- Uso del hook toast
+  const { toast } = useToast(); // <--- Uso del hook toast
   //    const [error, setError] = React.useState<string | null>(null); // Estado para manejar el error
-
-
 
   //  para el fetch de litado de idiomas
   useEffect(() => {
@@ -141,7 +141,7 @@ export default function CardsChat() {
     }
   }, [messages]);
 
-// funcion para traducir idioma sin selector  
+  // funcion para traducir idioma sin selector
 
   // const translateMessage = async (message: string) => {
   //   setLoading(true); // Iniciar loading
@@ -176,11 +176,8 @@ export default function CardsChat() {
   //   }
   // };
 
-
-//para traducir con selector
+  //para traducir con selector
   const translateMessage = async (message: string) => {
-
-
     setLoading(true);
     // setError(null); // Limpiamos el error antes de intentar la solicitud
 
@@ -202,20 +199,19 @@ export default function CardsChat() {
 
       if (!response.ok) {
         throw new Error("Error en la traducción");
-        
       }
 
       const data = await response.json();
       return data.data.translations[0].translatedText;
-    } 
-    catch (error) {
+    } catch (error) {
       console.error("Error traduciendo el mensaje:", error);
 
       // setError("Conexión perdida. Por favor, verifica tu conexión a Internet e intenta nuevamente.");
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request. Please check your connection.",
+        description:
+          "There was a problem with your request. Please check your connection.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
 
@@ -225,19 +221,18 @@ export default function CardsChat() {
     }
   };
 
-
-  // funcion para buscar mensaje en google api 
-  // funciona  pero los idiomas se muestran transparentes 
+  // funcion para buscar mensaje en google api
+  // funciona  pero los idiomas se muestran transparentes
   const fetchLanguages = async () => {
     try {
       const response = await fetch(
         `https://translation.googleapis.com/language/translate/v2/languages?key=${process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}&target=en`
       );
-  
+
       if (!response.ok) {
         throw new Error("Error fetching languages");
       }
-  
+
       const data = await response.json();
       return data.data.languages; // Devuelve la lista de idiomas
     } catch (error) {
@@ -245,7 +240,6 @@ export default function CardsChat() {
       return [];
     }
   };
-
 
   // useEffect(() => {
   //   // Fetch languages from Google API
@@ -278,8 +272,8 @@ export default function CardsChat() {
 
   //   fetchLanguages();
   // }, [toast]);
-  
-//viejo handle
+
+  //viejo handle
   // const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
   //   event.preventDefault();
   //   if (inputLength === 0) return;
@@ -332,45 +326,41 @@ export default function CardsChat() {
 
   return (
     <>
-    {/* {error && (
+      {/* {error && (
       <div className="bg-red-500 text-white p-4 rounded-lg mt-4">
         {error}
       </div>
     )} */}
       <div className="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-2s">
-
-      
-
-      <div className="w-full max-w-xs mx-auto">
-        <fieldset className="grid gap-6 rounded-lg border p-4">
-          <legend className="-ml-1 px-1 text-sm font-medium">Language to Trasnlate</legend>
-          <Select onValueChange={setSelectedLanguage}>
-            <SelectTrigger className="w-[180px] ">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-             <SelectContent>
+        <div className="w-full max-w-xs mx-auto">
+          <fieldset className="grid gap-6 rounded-lg border p-4">
+            <legend className="-ml-1 px-1 text-sm font-medium">
+              Language to Trasnlate
+            </legend>
+            <Select onValueChange={setSelectedLanguage}>
+              <SelectTrigger className="w-[180px] ">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
                 {/* <SelectItem value="en">English</SelectItem>
                 <SelectItem value="es">Spanish</SelectItem>
                 <SelectItem value="fr">French</SelectItem>
                 <SelectItem value="de">German</SelectItem> */}
                 {languages.map((language) => (
-                <SelectItem
-        key={language.language}
-        value={language.language}
-      >
-        {language.name}
-      </SelectItem>
-       ))}
-              </SelectContent> 
+                  <SelectItem key={language.language} value={language.language}>
+                    {language.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
 
-      {/* <SelectContent>
+              {/* <SelectContent>
               {languages.map((language) => (
                 <SelectItem key={language.language} value={language.language}  className="text-black opacity-100">
                   {language.name} {/* Aquí usamos language.name 
                 </SelectItem>
               ))}
             </SelectContent> */}
-          </Select>
+            </Select>
           </fieldset>
         </div>
 
@@ -382,8 +372,12 @@ export default function CardsChat() {
                 <AvatarFallback>OM</AvatarFallback>
               </Avatar>
               <div>
-                <p className="text-sm font-medium leading-none">Chatbot Agent</p>
-                <p className="text-sm text-muted-foreground">support@example.com</p>
+                <p className="text-sm font-medium leading-none">
+                  Chatbot Agent
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  support@example.com
+                </p>
               </div>
             </div>
             <TooltipProvider delayDuration={0}>

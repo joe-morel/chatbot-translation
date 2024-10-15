@@ -125,14 +125,14 @@ export default function CardsChat() {
 
 
   //  para el fetch de litado de idiomas
-  // useEffect(() => {
-  //   const getLanguages = async () => {
-  //     const langData = await fetchLanguages();
-  //     setLanguages(langData);
-  //   };
+  useEffect(() => {
+    const getLanguages = async () => {
+      const langData = await fetchLanguages();
+      setLanguages(langData);
+    };
 
-  //   getLanguages();
-  // }, []);
+    getLanguages();
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -228,59 +228,25 @@ export default function CardsChat() {
 
   // funcion para buscar mensaje en google api 
   // funciona  pero los idiomas se muestran transparentes 
-  // const fetchLanguages = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://translation.googleapis.com/language/translate/v2/languages?key=${process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}`
-  //     );
+  const fetchLanguages = async () => {
+    try {
+      const response = await fetch(
+        `https://translation.googleapis.com/language/translate/v2/languages?key=${process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}&target=en`
+      );
   
-  //     if (!response.ok) {
-  //       throw new Error("Error fetching languages");
-  //     }
-  
-  //     const data = await response.json();
-  //     return data.data.languages; // Devuelve la lista de idiomas
-  //   } catch (error) {
-  //     console.error("Error fetching languages:", error);
-  //     return [];
-  //   }
-  // };
-
-
-
-  useEffect(() => {
-    // Fetch languages from Google API
-    const fetchLanguages = async () => {
-      try {
-        const response = await fetch(
-          `https://translation.googleapis.com/language/translate/v2/languages?key=${process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}&target=en`
-        );
-  
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Error fetching languages: ${response.status} ${errorText}`);
-        }
-  
-        const data = await response.json();
-        const fetchedLanguages = data.data.languages.map((lang: any) => ({
-          name: lang.name, // Usa la propiedad 'name' para mostrar
-          language: lang.language, // Usa el código del idioma
-        }));
-  
-        setLanguages(fetchedLanguages);
-      } catch (error) {
-        console.error("Error fetching languages:", error);
-        toast({
-          variant: "destructive",
-          title: "Error fetching languages",
-          description: "Unable to load language list.",
-        });
+      if (!response.ok) {
+        throw new Error("Error fetching languages");
       }
-    };
   
-    fetchLanguages();
-  }, [toast]);
-  
+      const data = await response.json();
+      return data.data.languages; // Devuelve la lista de idiomas
+    } catch (error) {
+      console.error("Error fetching languages:", error);
+      return [];
+    }
+  };
+
+
   // useEffect(() => {
   //   // Fetch languages from Google API
   //   const fetchLanguages = async () => {

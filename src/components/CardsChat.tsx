@@ -116,6 +116,7 @@ export default function CardsChat() {
   const [loading, setLoading] = React.useState(false); // Estado de loading
   const [selectedLanguage, setSelectedLanguage] = React.useState(""); // Estado para el idioma seleccionado
   //const [languages, setLanguages] = React.useState([]); //Para el fetch de listado de idiomas
+  const [languages, setLanguages] = React.useState<{ name: string; language: string }[]>([]);
   const inputLength = input.trim().length;
   const scrollRef = useRef<HTMLDivElement>(null);
    const { toast } = useToast();  // <--- Uso del hook toast
@@ -230,7 +231,7 @@ export default function CardsChat() {
   // const fetchLanguages = async () => {
   //   try {
   //     const response = await fetch(
-  //       `https://translation.googleapis.com/language/translate/v2/languages?key=AIzaSyBTGnW1qen-dW1x8q332rrLjKeF5nB57Js`
+  //       `https://translation.googleapis.com/language/translate/v2/languages?key=${process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}`
   //     );
   
   //     if (!response.ok) {
@@ -244,6 +245,39 @@ export default function CardsChat() {
   //     return [];
   //   }
   // };
+
+
+  useEffect(() => {
+    // Fetch languages from Google API
+    const fetchLanguages = async () => {
+      try {
+        const response = await fetch(
+          `https://translation.googleapis.com/language/translate/v2/languages?key=${process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}&target=en`
+        );
+
+        if (!response.ok) {
+          throw new Error("Error fetching languages");
+        }
+
+        const data = await response.json();
+        const fetchedLanguages = data.data.languages.map((lang: any) => ({
+          name: lang.name, // Usa la propiedad 'name' para mostrar
+          language: lang.language, // Usa el código del idioma
+        }));
+
+        setLanguages(fetchedLanguages);
+      } catch (error) {
+        console.error("Error fetching languages:", error);
+        toast({
+          variant: "destructive",
+          title: "Error fetching languages",
+          description: "Unable to load language list.",
+        });
+      }
+    };
+
+    fetchLanguages();
+  }, [toast]);
   
 //viejo handle
   // const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -323,7 +357,6 @@ export default function CardsChat() {
                 <SelectItem
         key={language.language}
         value={language.language}
-        className="text-black opacity-100"
       >
         {language.name}
       </SelectItem>

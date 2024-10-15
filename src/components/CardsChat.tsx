@@ -247,6 +247,7 @@ export default function CardsChat() {
   // };
 
 
+
   useEffect(() => {
     // Fetch languages from Google API
     const fetchLanguages = async () => {
@@ -254,18 +255,18 @@ export default function CardsChat() {
         const response = await fetch(
           `https://translation.googleapis.com/language/translate/v2/languages?key=${process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}&target=en`
         );
-
+  
         if (!response.ok) {
-          throw new Error("Error fetching languages");
+          const errorText = await response.text();
+          throw new Error(`Error fetching languages: ${response.status} ${errorText}`);
         }
-
+  
         const data = await response.json();
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const fetchedLanguages = data.data.languages.map((lang: any) => ({
           name: lang.name, // Usa la propiedad 'name' para mostrar
           language: lang.language, // Usa el código del idioma
         }));
-
+  
         setLanguages(fetchedLanguages);
       } catch (error) {
         console.error("Error fetching languages:", error);
@@ -276,9 +277,41 @@ export default function CardsChat() {
         });
       }
     };
-
+  
     fetchLanguages();
   }, [toast]);
+  
+  // useEffect(() => {
+  //   // Fetch languages from Google API
+  //   const fetchLanguages = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `https://translation.googleapis.com/language/translate/v2/languages?key=${process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}&target=en`
+  //       );
+
+  //       if (!response.ok) {
+  //         throw new Error("Error fetching languages");
+  //       }
+
+  //       const data = await response.json();
+  //       const fetchedLanguages = data.data.languages.map((lang: any) => ({
+  //         name: lang.name, // Usa la propiedad 'name' para mostrar
+  //         language: lang.language, // Usa el código del idioma
+  //       }));
+
+  //       setLanguages(fetchedLanguages);
+  //     } catch (error) {
+  //       console.error("Error fetching languages:", error);
+  //       toast({
+  //         variant: "destructive",
+  //         title: "Error fetching languages",
+  //         description: "Unable to load language list.",
+  //       });
+  //     }
+  //   };
+
+  //   fetchLanguages();
+  // }, [toast]);
   
 //viejo handle
   // const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {

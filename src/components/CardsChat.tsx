@@ -260,6 +260,7 @@ export default function CardsChat() {
         }
 
         const data = await response.json();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const fetchedLanguages = data.data.languages.map((lang: any) => ({
           name: lang.name, // Usa la propiedad 'name' para mostrar
           language: lang.language, // Usa el código del idioma

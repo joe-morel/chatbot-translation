@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useEffect, useRef } from "react";
-import { Check, Plus, Send, Loader2 } from "lucide-react"; // Asegúrate de importar Loader2
+import { Check, Plus, Send, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Button } from "../components/ui/button";
@@ -48,31 +48,6 @@ import {
 import { useToast } from "../hooks/use-toast"; // <--- useToast
 import { ToastAction } from "../components/ui/toast"; // <---  ToastAction
 
-// const TARGET_LANGUAGE = "en";
-
-// const languages = [
-//   { name: 'English', language: 'en' },
-//   { name: 'Spanish', language: 'es' },
-//   { name: 'French', language: 'fr' },
-//   { name: 'German', language: 'de' },
-//   { name: 'Italian', language: 'it' },
-//   { name: 'Portuguese', language: 'pt' },
-//   { name: 'Russian', language: 'ru' },
-//   { name: 'Chinese', language: 'zh' },
-//   { name: 'Japanese', language: 'ja' },
-//   { name: 'Arabic', language: 'ar' },
-//   { name: 'Korean', language: 'ko' },
-//   { name: 'Hindi', language: 'hi' },
-//   { name: 'Turkish', language: 'tr' },
-//   { name: 'Dutch', language: 'nl' },
-//   { name: 'Swedish', language: 'sv' },
-//   { name: 'Danish', language: 'da' },
-//   { name: 'Norwegian', language: 'no' },
-//   { name: 'Finnish', language: 'fi' },
-//   { name: 'Czech', language: 'cs' },
-//   { name: 'Greek', language: 'el' },
-// ];
-
 const users = [
   {
     name: "Olivia Martin",
@@ -99,32 +74,30 @@ const users = [
     email: "will@email.com",
     avatar: "/avatars/04.png",
   },
-] as const;
+] as const; //users for dialog
 
 type User = (typeof users)[number];
 
 export default function CardsChat() {
-  const [open, setOpen] = React.useState(false);
-  const [selectedUsers, setSelectedUsers] = React.useState<User[]>([]);
+  const [open, setOpen] = React.useState(false); //open dialog
+  const [selectedUsers, setSelectedUsers] = React.useState<User[]>([]); // for dialog
   const [messages, setMessages] = React.useState([
     {
       role: "agent",
       content: "Hello, write me something and I will help you to translate it.",
     },
-  ]);
+  ]); // First message from the agent by default
   const [input, setInput] = React.useState("");
-  const [loading, setLoading] = React.useState(false); // Estado de loading
-  const [selectedLanguage, setSelectedLanguage] = React.useState(""); // Estado para el idioma seleccionado
-  //const [languages, setLanguages] = React.useState([]); //Para el fetch de listado de idiomas
+  const [loading, setLoading] = React.useState(false); // State for loadin
+  const [selectedLanguage, setSelectedLanguage] = React.useState(""); // State for the language selected
   const [languages, setLanguages] = React.useState<
     { name: string; language: string }[]
   >([]);
   const inputLength = input.trim().length;
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast(); // <--- Uso del hook toast
-  //    const [error, setError] = React.useState<string | null>(null); // Estado para manejar el error
+  const { toast } = useToast(); // <--- Use of the hook toast
 
-  //  para el fetch de litado de idiomas
+  // Fetch for list of languages
   useEffect(() => {
     const getLanguages = async () => {
       const langData = await fetchLanguages();
@@ -134,52 +107,16 @@ export default function CardsChat() {
     getLanguages();
   }, []);
 
+  // Setting the scroll to the end
   useEffect(() => {
     if (scrollRef.current) {
-      // Ajustar el scroll al final
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // funcion para traducir idioma sin selector
-
-  // const translateMessage = async (message: string) => {
-  //   setLoading(true); // Iniciar loading
-  //   try {
-  //     // Simular un tiempo de espera mínimo (por ejemplo, 500 ms)
-  //     await new Promise((resolve) => setTimeout(resolve, 200));
-  //     const response = await fetch(
-  //       `https://translation.googleapis.com/language/translate/v2?key=AIzaSyBTGnW1qen-dW1x8q332rrLjKeF5nB57Js`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           q: message,
-  //           target: TARGET_LANGUAGE,
-  //         }),
-  //       }
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Error en la traducción");
-  //     }
-
-  //     const data = await response.json();
-  //     return data.data.translations[0].translatedText;
-  //   } catch (error) {
-  //     console.error("Error traduciendo el mensaje:", error);
-  //     return message; // Si hay un error, devuelve el mensaje original
-  //   } finally {
-  //     setLoading(false); // Detener loading
-  //   }
-  // };
-
-  //para traducir con selector
+  // Traslate with the selector
   const translateMessage = async (message: string) => {
     setLoading(true);
-    // setError(null); // Limpiamos el error antes de intentar la solicitud
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 200));
@@ -192,21 +129,21 @@ export default function CardsChat() {
           },
           body: JSON.stringify({
             q: message,
-            target: selectedLanguage, // Usar el idioma seleccionado
+            target: selectedLanguage, // Use the selected language
           }),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Error en la traducción");
+        throw new Error("Error in translation");
       }
 
       const data = await response.json();
       return data.data.translations[0].translatedText;
     } catch (error) {
-      console.error("Error traduciendo el mensaje:", error);
+      console.error("Error translating the message:", error);
 
-      // setError("Conexión perdida. Por favor, verifica tu conexión a Internet e intenta nuevamente.");
+      // toast for error message
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -221,8 +158,8 @@ export default function CardsChat() {
     }
   };
 
-  // funcion para buscar mensaje en google api
-  // funciona  pero los idiomas se muestran transparentes
+  // Function to search message in google api
+  // Adding &target="en" to the final api for show on list of languages on the list in english
   const fetchLanguages = async () => {
     try {
       const response = await fetch(
@@ -234,60 +171,15 @@ export default function CardsChat() {
       }
 
       const data = await response.json();
-      return data.data.languages; // Devuelve la lista de idiomas
+      return data.data.languages; // Returns the list of languages
     } catch (error) {
       console.error("Error fetching languages:", error);
       return [];
     }
   };
 
-  // useEffect(() => {
-  //   // Fetch languages from Google API
-  //   const fetchLanguages = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `https://translation.googleapis.com/language/translate/v2/languages?key=${process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY}&target=en`
-  //       );
-
-  //       if (!response.ok) {
-  //         throw new Error("Error fetching languages");
-  //       }
-
-  //       const data = await response.json();
-  //       const fetchedLanguages = data.data.languages.map((lang: any) => ({
-  //         name: lang.name, // Usa la propiedad 'name' para mostrar
-  //         language: lang.language, // Usa el código del idioma
-  //       }));
-
-  //       setLanguages(fetchedLanguages);
-  //     } catch (error) {
-  //       console.error("Error fetching languages:", error);
-  //       toast({
-  //         variant: "destructive",
-  //         title: "Error fetching languages",
-  //         description: "Unable to load language list.",
-  //       });
-  //     }
-  //   };
-
-  //   fetchLanguages();
-  // }, [toast]);
-
-  //viejo handle
-  // const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   if (inputLength === 0) return;
-
-  //   // Agregar el mensaje original del usuario al estado de mensajes
-  //   setMessages((prevMessages) => [
-  //     ...prevMessages,
-  //     {
-  //       role: "user",
-  //       content: input,
-  //     },
-  //   ]);
-
-  //nuevo
+  //Handle Error for send message
+  //Supports the fact that the language is first selecting
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedLanguage) {
@@ -309,10 +201,10 @@ export default function CardsChat() {
       },
     ]);
 
-    // Traducir el mensaje
+    // Traslate the message
     const translatedMessage = await translateMessage(input);
 
-    // Agregar la traducción como un nuevo mensaje del agente
+    // Add the translation as a new agent message
     setMessages((prevMessages) => [
       ...prevMessages,
       {
@@ -326,11 +218,6 @@ export default function CardsChat() {
 
   return (
     <>
-      {/* {error && (
-      <div className="bg-red-500 text-white p-4 rounded-lg mt-4">
-        {error}
-      </div>
-    )} */}
       <div className="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-2s">
         <div className="w-full max-w-xs mx-auto">
           <fieldset className="grid gap-6 rounded-lg border p-4">
@@ -342,24 +229,12 @@ export default function CardsChat() {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {/* <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Spanish</SelectItem>
-                <SelectItem value="fr">French</SelectItem>
-                <SelectItem value="de">German</SelectItem> */}
                 {languages.map((language) => (
                   <SelectItem key={language.language} value={language.language}>
                     {language.name}
                   </SelectItem>
                 ))}
               </SelectContent>
-
-              {/* <SelectContent>
-              {languages.map((language) => (
-                <SelectItem key={language.language} value={language.language}  className="text-black opacity-100">
-                  {language.name} {/* Aquí usamos language.name 
-                </SelectItem>
-              ))}
-            </SelectContent> */}
             </Select>
           </fieldset>
         </div>
@@ -397,7 +272,6 @@ export default function CardsChat() {
               </Tooltip>
             </TooltipProvider>
           </CardHeader>
-
           <CardContent>
             <div
               className="flex flex-col h-80 overflow-y-auto p-4"
@@ -417,7 +291,7 @@ export default function CardsChat() {
                     {message.content}
                   </div>
                 ))}
-                {loading && ( // Mostrar el spinner si loading es true
+                {loading && ( // Show spinner if loading is true
                   <div className="flex items-center">
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     <span>Translating...</span>
@@ -426,7 +300,6 @@ export default function CardsChat() {
               </div>
             </div>
           </CardContent>
-
           <CardFooter>
             <form
               onSubmit={handleSendMessage}
@@ -477,7 +350,6 @@ export default function CardsChat() {
                             )
                           );
                         }
-
                         return setSelectedUsers(
                           [...users].filter((u) =>
                             [...selectedUsers, user].includes(u)

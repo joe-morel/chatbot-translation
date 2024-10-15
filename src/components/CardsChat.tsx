@@ -50,28 +50,28 @@ import {
 
 // const TARGET_LANGUAGE = "en";
 
-const languages = [
-  { name: 'English', language: 'en' },
-  { name: 'Spanish', language: 'es' },
-  { name: 'French', language: 'fr' },
-  { name: 'German', language: 'de' },
-  { name: 'Italian', language: 'it' },
-  { name: 'Portuguese', language: 'pt' },
-  { name: 'Russian', language: 'ru' },
-  { name: 'Chinese', language: 'zh' },
-  { name: 'Japanese', language: 'ja' },
-  { name: 'Arabic', language: 'ar' },
-  { name: 'Korean', language: 'ko' },
-  { name: 'Hindi', language: 'hi' },
-  { name: 'Turkish', language: 'tr' },
-  { name: 'Dutch', language: 'nl' },
-  { name: 'Swedish', language: 'sv' },
-  { name: 'Danish', language: 'da' },
-  { name: 'Norwegian', language: 'no' },
-  { name: 'Finnish', language: 'fi' },
-  { name: 'Czech', language: 'cs' },
-  { name: 'Greek', language: 'el' },
-];
+// const languages = [
+//   { name: 'English', language: 'en' },
+//   { name: 'Spanish', language: 'es' },
+//   { name: 'French', language: 'fr' },
+//   { name: 'German', language: 'de' },
+//   { name: 'Italian', language: 'it' },
+//   { name: 'Portuguese', language: 'pt' },
+//   { name: 'Russian', language: 'ru' },
+//   { name: 'Chinese', language: 'zh' },
+//   { name: 'Japanese', language: 'ja' },
+//   { name: 'Arabic', language: 'ar' },
+//   { name: 'Korean', language: 'ko' },
+//   { name: 'Hindi', language: 'hi' },
+//   { name: 'Turkish', language: 'tr' },
+//   { name: 'Dutch', language: 'nl' },
+//   { name: 'Swedish', language: 'sv' },
+//   { name: 'Danish', language: 'da' },
+//   { name: 'Norwegian', language: 'no' },
+//   { name: 'Finnish', language: 'fi' },
+//   { name: 'Czech', language: 'cs' },
+//   { name: 'Greek', language: 'el' },
+// ];
 
 const users = [
   {

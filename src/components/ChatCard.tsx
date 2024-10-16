@@ -68,6 +68,7 @@ export default function ChatCard({
         { role: "agent", content: translatedMessage },
       ]);
     } catch (error) {
+    console.error("Error translating the message:", error);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",

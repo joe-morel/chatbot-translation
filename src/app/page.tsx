@@ -1,5 +1,4 @@
 import MainCard from "@/components/MainCard";
-import CardsChat from "../components/CardsChat";
 
 export default function Home() {
   return (

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login, signup } from "./actions";
+import { login } from "./actions";
 
 // export const description =
 //   "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account.";
@@ -33,7 +33,7 @@ export default function LoginForm() {
               name="email"
               type="email"
               required
-              placeholder="joe@example.com"
+              placeholder="user@example.com"
             />
           </div>
           <div className="grid gap-2">
@@ -43,14 +43,14 @@ export default function LoginForm() {
                 Forgot your password?
               </Link>
             </div>
-            <Input id="password" name="password" type="password" required />
+            <Input id="password" name="password" type="password" placeholder="123456" required />
           </div>
           <Button type="submit" className="w-full" formAction={login}>
             Login
           </Button>
-          <Button variant="outline" className="w-full" formAction={signup}>
+          {/* <Button variant="outline" className="w-full" formAction={signup}>
             Sign up
-          </Button>
+          </Button> */}
         </form>
       </CardContent>
     </Card>

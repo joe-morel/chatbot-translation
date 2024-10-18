@@ -78,7 +78,7 @@ You can try this app deployed on Vercel here https://chatbot-translation.vercel.
 - The translated message is returned to the frontend and displayed in the interface.
 
 #### **API Keys:**
-To obtain a translation API key:
+To obtain a the APIs key:
 1. [Guide to get a Google Translate API key](https://cloud.google.com/translate/docs/setup)
 2. [Guide to create a Supabase project and get a Supabase API key](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
 

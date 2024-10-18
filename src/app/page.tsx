@@ -1,7 +1,7 @@
 import { fetchLanguages } from "@/lib/google-language-list";
 import ChatCard from "@/components/ChatCard";
 import * as React from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function Home() {

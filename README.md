@@ -63,9 +63,9 @@ You can try this app deployed on Vercel here https://chatbot-translation.vercel.
 - **Frontend:**
   - Library: React.js with Next.js
   - UI Component Library: shadcn/ui
-  - State Management: React Context or Redux
+  - State Management: useState for local component state management
   - Styling: Tailwind CSS
-  - Real-Time Communication: WebSockets
+  - Real-Time Communication: HTTP requests to Node.js backend
 
 - **Backend:**
   - Framework: Node.js with Next.js

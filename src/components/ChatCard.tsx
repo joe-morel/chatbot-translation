@@ -36,13 +36,14 @@ export default function ChatCard({ languages, user, initialMessages }: Props) {
       role: "agent",
       message: "Hello, write me something and I will help you to translate it.",
     },
-  ]);
+  ]); // First message from the agent by default
   const [input, setInput] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const inputLength = input.trim().length;
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
+  const { toast } = useToast(); // <--- Use of the hook toast  for error
 
+    // Setting the scroll to the end
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -66,10 +67,12 @@ export default function ChatCard({ languages, user, initialMessages }: Props) {
       window.location.reload();
     }, 2000);
   };
-
+  //Handle Error for send message
+  //Supports the fact that the language is first selecting
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedLanguage) {
+        // toast for error message for language selector
       toast({
         variant: "destructive",
         title: "Language not selected",
@@ -79,7 +82,7 @@ export default function ChatCard({ languages, user, initialMessages }: Props) {
     }
 
     if (inputLength === 0) return;
-
+ // Add input as a user role message
     setMessages((prevMessages) => [
       ...prevMessages,
       { role: "user", message: input },
@@ -87,14 +90,16 @@ export default function ChatCard({ languages, user, initialMessages }: Props) {
 
     setLoading(true);
     try {
-      const translatedMessage = await translateMessageAction(input, selectedLanguage); // Llama a la acción del servidor
-
+      const translatedMessage = await translateMessageAction(input, selectedLanguage); // call action to server for translate message
+      
+      // Add the translation as a new agent message
       setMessages((prevMessages) => [
         ...prevMessages,
         { role: "agent", message: translatedMessage },
       ]);
     } catch (error) {
       console.error("Error translating the message:", error);
+        // toast for error message for connection
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",

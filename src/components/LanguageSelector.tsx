@@ -6,24 +6,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
+import {Language} from "@/types/types";
 
 interface SelectLanguageProps {
-  languages: { name: string; language: string }[];
+  languages: Language[];
   onLanguageChange: (language: string) => void;
 }
 
-const SelectLanguage: React.FC<SelectLanguageProps> = ({
+const LanguageSelector: React.FC<SelectLanguageProps> = ({
   languages,
   onLanguageChange,
 }) => {
   return (
-    <fieldset className="grid gap-6 rounded-lg border p-4">
-      <legend className="-ml-1 px-1 text-sm font-medium">
-        Language to Translate
-      </legend>
+    <div className="flex flex-col gap-1">
       <Select onValueChange={onLanguageChange}>
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select" />
+          <SelectValue placeholder="Select a language" />
         </SelectTrigger>
         <SelectContent>
           {languages.map((language) => (
@@ -33,8 +31,8 @@ const SelectLanguage: React.FC<SelectLanguageProps> = ({
           ))}
         </SelectContent>
       </Select>
-    </fieldset>
+    </div>
   );
 };
 
-export default SelectLanguage;
+export default LanguageSelector;

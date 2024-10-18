@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useEffect } from "react";
 import { fetchLanguages } from "@/lib/google-language-list";
-import SelectLanguage from "./SelectLanguage";
+import SelectLanguage from "./LanguageSelector";
 import ChatCard from "./ChatCard";
 
 export default function MainCard() {

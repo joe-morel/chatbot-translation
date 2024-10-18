@@ -4,7 +4,7 @@ import * as React from "react";
 import { useEffect, useRef } from "react";
 import { Send, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { Avatar, AvatarFallback } from "../components/ui/avatar";
 import { Button } from "../components/ui/button";
 import {
   Card,
@@ -15,18 +15,26 @@ import {
 import { Input } from "../components/ui/input";
 import { useToast } from "../hooks/use-toast";
 import { ToastAction } from "../components/ui/toast";
-import { translateMessageAction } from "@/app/actions/translateMessage-action"; // Importa la acción del servidor
+import { translateMessageAction } from "@/app/actions/translateMessage-action";
+import LanguageSelector from "@/components/LanguageSelector";
+import { Language } from "@/types/types";
+import Link from "next/link";
+import { User } from "@supabase/auth-js";
+import { createClient } from "@/utils/supabase/client";
 
-export default function ChatCard({
-  selectedLanguage,
-}: {
-  selectedLanguage: string;
-  languages: { name: string; language: string }[];
-}) {
-  const [messages, setMessages] = React.useState([
+
+interface Props {
+  languages: Language[];
+  user?: User | null;
+  initialMessages?: { role: "agent" | "user"; message: string }[];
+}
+
+export default function ChatCard({ languages, user, initialMessages }: Props) {
+  const [selectedLanguage, setSelectedLanguage] = React.useState("");
+  const [messages, setMessages] = React.useState(user?.email && initialMessages?.length ? initialMessages : [
     {
       role: "agent",
-      content: "Hello, write me something and I will help you to translate it.",
+      message: "Hello, write me something and I will help you to translate it.",
     },
   ]);
   const [input, setInput] = React.useState("");
@@ -40,6 +48,24 @@ export default function ChatCard({
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const signOut = async () => {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error logging out:", error.message);
+      return;
+    }
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { role: "agent", message: "You have been successfully logged out. Refreshing in two seconds..." },
+    ]);
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
 
   const handleSendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,7 +82,7 @@ export default function ChatCard({
 
     setMessages((prevMessages) => [
       ...prevMessages,
-      { role: "user", content: input },
+      { role: "user", message: input },
     ]);
 
     setLoading(true);
@@ -65,10 +91,10 @@ export default function ChatCard({
 
       setMessages((prevMessages) => [
         ...prevMessages,
-        { role: "agent", content: translatedMessage },
+        { role: "agent", message: translatedMessage },
       ]);
     } catch (error) {
-    console.error("Error translating the message:", error);
+      console.error("Error translating the message:", error);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -84,33 +110,52 @@ export default function ChatCard({
   };
 
   return (
-    <Card className="w-full max-w-xs mx-auto">
-      <CardHeader className="flex flex-row items-center">
+    <Card className="w-full max-w-2xl mx-auto">
+      <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-4">
+        <LanguageSelector
+          languages={languages}
+          onLanguageChange={setSelectedLanguage}
+        />
         <div className="flex items-center space-x-4">
-          <Avatar>
-            <AvatarImage src="/avatars/01.png" alt="Image" />
-            <AvatarFallback>OM</AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="text-sm font-medium leading-none">Chatbot Agent</p>
-            <p className="text-sm text-muted-foreground">support@example.com</p>
-          </div>
+          {user?.email ? (
+            <>
+              <div className="text-right max-md:hidden">
+                <p className="text-sm font-medium leading-none">User</p>
+                <p className="text-sm text-muted-foreground">{user?.email}</p>
+              </div>
+              <Avatar className="group">
+                {/* Signout icon */}
+                <Button onClick={signOut} className="hidden group-hover:block" asChild>
+                  <Send />
+                </Button>
+                <AvatarFallback className="uppercase group-hover:hidden">
+                  {user?.email?.slice(0, 2)}
+                </AvatarFallback>
+              </Avatar>
+            </>
+          ) : (
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/login">
+                Login
+              </Link>
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col h-80 overflow-y-auto p-4" ref={scrollRef}>
+        <div className="flex flex-col h-full min-h-56 max-h-96 overflow-y-auto py-4 sm:p-4" ref={scrollRef}>
           <div className="flex-1 flex flex-col space-y-4">
             {messages.map((message, index) => (
               <div
                 key={index}
                 className={cn(
-                  "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                  "flex w-fit max-w-[80%] sm:max-w-[60%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
                   message.role === "user"
                     ? "ml-auto bg-primary text-primary-foreground"
-                    : "bg-muted"
+                    : "bg-muted",
                 )}
               >
-                {message.content}
+                {message.message}
               </div>
             ))}
             {loading && (

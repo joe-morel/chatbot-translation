@@ -1,3 +1,5 @@
+import {Language} from "@/types/types";
+
 export async function fetchLanguages() {
   try {
     const response = await fetch(
@@ -9,7 +11,7 @@ export async function fetchLanguages() {
     }
 
     const data = await response.json();
-    return data.data.languages;
+    return data.data.languages as Language[];
   } catch (error) {
     console.error("Error fetching languages:", error);
     return [];

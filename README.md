@@ -35,7 +35,7 @@ You can try this app deployed on Vercel here https://chatbot-translation.vercel.
    ```
 3. Set up environment variables:
 
-   Create a `.env` file in the project root with the following parameters:
+   Create a `.env.example` file in the project root with the following parameters:
 
    ```shell
    NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY=YOUR_API_KEY

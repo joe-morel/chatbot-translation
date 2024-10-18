@@ -1,4 +1,5 @@
 ## Chatbot Translation Web App
+<img width="600" alt="chatbot-github-cover" src="https://github.com/user-attachments/assets/1550525a-e967-428f-a997-ead6c6bd1cb7">
 
 This project is a real-time language translation chatbot designed to facilitate 
 multilingual communication through a chat interface. Users can send messages in 
